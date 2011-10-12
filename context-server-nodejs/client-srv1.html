@@ -1,0 +1,17 @@
+﻿<html>
+<body>
+<script type="text/javascript" 
+        src="http://localhost:8000/faye.js">
+        </script>
+
+<script type="text/javascript">
+    var client = new Faye.Client('http://localhost:8000/faye');
+
+var subscription = client.subscribe('/foo', function(message) {
+  // handle message
+	//alert("received!");
+});
+</script>
+
+</body>
+</html>
