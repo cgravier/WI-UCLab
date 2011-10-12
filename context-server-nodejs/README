@@ -1,0 +1,17 @@
+# To run the server, node.js should be installed.
+# The server :
+#	- generates a regular interval of time new values for temperature et luminosity sensors.
+# 	- keeps trace of the state of the shutters (closed by default).
+#	- act as a bayeux-compliant message broker.
+
+# You can run the server with the following command : 
+
+node simulateArduino.js
+
+# The server handle baveux requests on port 8000.
+# A Q&D http server is attached to handle non-bayeux requests as follows (you can try those requests on your web browser)
+
+http://localhost:8000/ 				: serves a JSON a current values simulated for temperature, luminosity, along the shutters state (closed or opened)
+
+http://localhost:8000/shutters={closed,opened}	: modify server-side the shutters state accordingly http://localhost:8000/shutters=closed to close the shutters, http://localhost:8000/shutters=opened to open them.
+
