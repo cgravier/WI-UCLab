@@ -2,10 +2,16 @@
 // C. Gravier - October 11th 2011 evening
 // Simulate a Web server in javacript using node.js that acts as the embedded Arduino Web servers done the first hands-on session
 
+// process.argv[2] : IP address of the serveur
+// process.argv[3] : server port to listen to
+
 var http = require('http'),
 	faye = require('faye');
 var fs = require('fs');
 var url = require('url');
+
+var addr = process.argv[2];
+var port = process.argv[3];
 
 // the faye service for cross browsers publish/subscribe (CometD java client accepted for stand alone version of the client)
 var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
@@ -17,7 +23,7 @@ jsondefault["temp"] = "0";
 jsondefault["lumi"] = "0";
 jsondefault["shutters"] = "closed";
 
-fs.writeFileSync("./context.json", JSON.stringify(jsondefault), 'utf8');
+fs.writeFileSync("./"+port+"/context.json", JSON.stringify(jsondefault), 'utf8');
 
 
 // Handle non-Bayeux requests : generate JSON with current param
@@ -29,7 +35,7 @@ var server = http.createServer(function(request, response) {
 	var lumi = "";
 	var shutter = "";
 
-	var data = fs.readFileSync('./context.json'); 
+	var data = fs.readFileSync('./'+port+'/context.json'); 
 	var jsondata = JSON.parse(data);
 	
 	// 2 - if GET params "setshutters={closed,opened}"
@@ -47,7 +53,7 @@ var server = http.createServer(function(request, response) {
 			if (params[0] == "shutters" && (params[1] == "closed" || params[1] == "opened")) 
 			{
 				jsondata["shutters"]=params[1];
-				fs.writeFileSync("./context.json", JSON.stringify(jsondata), 'utf8');
+				fs.writeFileSync("./"+port+"/context.json", JSON.stringify(jsondata), 'utf8');
 				response.write("Context updated.");
 			} else {
 				response.write("Erreur, bad GET parameters. Expected is &shutters={closed,opened}");	
@@ -66,28 +72,28 @@ var server = http.createServer(function(request, response) {
 
 
 bayeux.attach(server);
-server.listen(8000);
+server.listen(port);
 
-console.log("Server is listening on http://localhost:8000. Have fun !");
+console.log("Server is listening on http://"+addr+":"+port+". Have fun !");
 
 function updateContext()
 {
-	var data = fs.readFileSync('./context.json'); 
+	var data = fs.readFileSync('./'+port+'/context.json'); 
 	var jsondata = JSON.parse(data);
 
 	jsondata["temp"] = Math.floor(Math.random()*41);
 	jsondata["lumi"] = Math.floor(Math.random()*2001);
 	
-	fs.writeFileSync("./context.json", JSON.stringify(jsondata), 'utf8');
+	fs.writeFileSync("./"+port+"/context.json", JSON.stringify(jsondata), 'utf8');
 	
-	console.log("context updated. New temp = "+jsondata["temp"]+", New lumi = "+jsondata["lumi"]);
+	//console.log("context updated. New temp = "+jsondata["temp"]+", New lumi = "+jsondata["lumi"]);
 	
 	return jsondata;
 }
 
-console.log("Setting context updates...");
+//console.log("Setting context updates...");
 // until the end, update context (temperature and luminosity) to simulate arduino sensors (OK temp and luminosity are randomly generated, i.e. a temp of 10 degrees can be followed by a temp of 39 degrees. This is for demonstration/learning purpose, stay cool with this ! ;-)).
-var client = new Faye.Client('http://localhost:8000/faye');
+var client = new Faye.Client('http://'+addr+':'+port+'/faye');
 
 
 setInterval(function(){
@@ -98,7 +104,7 @@ setInterval(function(){
 	// publish updates on topic "contextupdates"
 	client.publish('/foo', JSON.stringify(newcontext));
 	
-	console.log("Update published on a topic."+JSON.stringify(newcontext));
+	//console.log("Update published on a topic."+JSON.stringify(newcontext));
 
 }, 3000)
 
@@ -111,7 +117,7 @@ while(true)
 	// publish updates on topic "contextupdates"
 	client.publish('/foo', JSON.stringify(newcontext));
 	
-	console.log("Update published on a topic."+JSON.stringify(newcontext));
+	//console.log("Update published on a topic."+JSON.stringify(newcontext));
 	
 	var now = new Date().getTime();
 	while(new Date().getTime() < now + 3000) {

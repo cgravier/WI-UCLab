@@ -1,4 +1,0 @@
-# To compile the client run "sh ./compiler.sh"
-# to run the client run "sh ./executer.sh"
-
-# no maven here, the lab is 3 hours long, and i am not sure all students are familiar with maven (not the pedagogical objective on this lab to master mvn)
