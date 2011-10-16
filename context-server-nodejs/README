@@ -6,7 +6,7 @@
 
 # You can run the server with the following command : 
 
-node simulateArduino.js
+node simulateArduino.js 127.0.0.1 8001
 
 # The server handle baveux requests on port 8000.
 # A Q&D http server is attached to handle non-bayeux requests as follows (you can try those requests on your web browser)
