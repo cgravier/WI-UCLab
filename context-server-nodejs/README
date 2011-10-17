@@ -13,5 +13,5 @@ node simulateArduino.js 127.0.0.1 8001
 
 http://localhost:8000/ 				: serves a JSON a current values simulated for temperature, luminosity, along the shutters state (closed or opened)
 
-http://localhost:8000/shutters={closed,opened}	: modify server-side the shutters state accordingly http://localhost:8000/shutters=closed to close the shutters, http://localhost:8000/shutters=opened to open them.
+http://localhost:8000/?shutters={closed,opened}	: modify server-side the shutters state accordingly http://localhost:8000/?shutters=closed to close the shutters, http://localhost:8000/?shutters=opened to open them.
 
