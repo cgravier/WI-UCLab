@@ -1,0 +1,18 @@
+#Context-awareness Lab
+
+## This is a CS lab document.
+This is source code for Context-awareness lab fof 2nd-year Web Intelligence master students.
+
+It is composed of :
+<ul>
+<li> A "context server" held responsible to synthesise context information that simulates temperature and luminosity information from a couple of sensors. The server is written in javascript and provided using node.js. It is able to answer both HTTP and Bayeux requests.</lI>
+<li> A "context client" that connects to the server using the Bayeux protocol that the student have to complete.</li>
+</ul>
+
+## Work to do
+The work is detailed within the Lab pdf in this repository. Roughly you have to :
+<ul>
+<li>Install the server</li>
+<li>Get the Java bayeux client working and reacts to significant context changes</li>
+<li>Get the Java client anticipate the context changes</li>
+</ul>
