@@ -93,7 +93,7 @@ function updateContext()
 
 //console.log("Setting context updates...");
 // until the end, update context (temperature and luminosity) to simulate arduino sensors (OK temp and luminosity are randomly generated, i.e. a temp of 10 degrees can be followed by a temp of 39 degrees. This is for demonstration/learning purpose, stay cool with this ! ;-)).
-var client = new Faye.Client('http://'+addr+':'+port+'/faye');
+var client = new faye.Client('http://'+addr+':'+port+'/faye');
 
 
 setInterval(function(){
